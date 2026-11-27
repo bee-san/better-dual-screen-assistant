@@ -61,6 +61,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.automirrored.rounded.Undo
+import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.Checklist
 import androidx.compose.material.icons.rounded.ColorLens
 import androidx.compose.material.icons.rounded.Colorize
@@ -158,6 +159,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.stormpanda.betterdualscreenassistant.extras.ExtrasSettingsTabContent
 import com.stormpanda.betterdualscreenassistant.plugin.BdsaPluginContract
 import com.stormpanda.betterdualscreenassistant.plugin.PluginIconLoader
 import com.stormpanda.betterdualscreenassistant.plugin.PluginRegistry
@@ -540,6 +542,7 @@ private enum class LauncherCategory(
     QUICK_TOGGLES(R.string.settings_cat_quick_toggles, Icons.Rounded.GridView),
     APPEARANCE(R.string.settings_cat_appearance, Icons.Rounded.Palette),
     PLUGINS(R.string.settings_cat_plugins, Icons.Rounded.Extension),
+    EXTRAS(R.string.settings_cat_extras, Icons.Rounded.AutoAwesome),
     UPDATES(R.string.settings_cat_updates, Icons.Rounded.SystemUpdate),
     DIAGNOSTICS(R.string.settings_cat_diagnostics, Icons.Rounded.HealthAndSafety)
 }
@@ -985,6 +988,10 @@ private fun BetterDualScreenSettingsScreen(repo: SystemSettingsRepository) {
                                                     )
                                                 }
                                             )
+                                        }
+
+                                        LauncherCategory.EXTRAS -> {
+                                            ExtrasSettingsTabContent(injectOsTheme = injectSystemTheme)
                                         }
 
                                         LauncherCategory.UPDATES -> {

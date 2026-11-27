@@ -16,6 +16,7 @@ import android.os.SystemClock
 import android.util.Log
 import com.stormpanda.betterdualscreenassistant.MainActivity
 import com.stormpanda.betterdualscreenassistant.R
+import com.stormpanda.betterdualscreenassistant.extras.ExtrasRuntime
 import com.stormpanda.betterdualscreenassistant.overlay.ScreenOverlayManager
 import com.stormpanda.betterdualscreenassistant.plugin.PluginRegistry
 import com.stormpanda.betterdualscreenassistant.privileged.PServerClient
@@ -296,6 +297,7 @@ class AssistantForegroundService : Service() {
                 repository.reconcileImePinModeOnStartup()
             }
         }
+        ExtrasRuntime.onServiceCreate(applicationContext, serviceScope)
         serviceScope.launch {
             pluginRegistry.toastEvents.collect { event ->
                 overlayManager.showBottomToast(event.message)
@@ -555,6 +557,7 @@ class AssistantForegroundService : Service() {
         overviewProxyClient.unbind()
         mappingServiceClient.unbind()
         repository.unregister()
+        ExtrasRuntime.onServiceDestroy(applicationContext)
         serviceScope.cancel()
         super.onDestroy()
     }

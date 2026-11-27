@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later. Fork-only strings (bee-san/better-dual-screen-assistant). -->
+<resources>
+    <string name="settings_cat_extras" translatable="false">Extras</string>
+    <string name="extras_schedules_header" translatable="false">Schedules</string>
+    <string name="extras_schedule_night_light" translatable="false">Night Light schedule</string>
+    <string name="extras_schedule_extra_dim" translatable="false">Extra Dim schedule</string>
+    <string name="extras_schedule_dark_theme" translatable="false">Dark Theme schedule</string>
+    <string name="extras_schedule_desc" translatable="false">On from %1$s to %2$s every day. A manual toggle lasts until the next switch time.</string>
+    <string name="extras_schedule_dark_theme_blocked" translatable="false">Unavailable while OS Theme Injection is on, because the Theme Mode tile owns the system theme.</string>
+    <string name="extras_schedule_start" translatable="false">%1$s: turn on at</string>
+    <string name="extras_schedule_end" translatable="false">%1$s: turn off at</string>
+</resources>

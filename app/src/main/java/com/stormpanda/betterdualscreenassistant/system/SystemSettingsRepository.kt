@@ -2653,6 +2653,33 @@ class SystemSettingsRepository(private val context: Context) {
         }
     }
 
+    /** Explicit setters used by the extras schedule engine (fork-only). */
+    fun setNightLight(enabled: Boolean) {
+        if (_nightLightEnabled.value == enabled && readSecureFlag(KEY_NIGHT_DISPLAY_ACTIVATED) == enabled) return
+        _nightLightEnabled.value = enabled
+        PrivilegedBridge.putSecureSettingInt(context, KEY_NIGHT_DISPLAY_ACTIVATED, if (enabled) 1 else 0)
+    }
+
+    fun setExtraDim(enabled: Boolean) {
+        if (_extraDimEnabled.value == enabled && readSecureFlag(KEY_REDUCE_BRIGHT_COLORS_ACTIVATED) == enabled) return
+        _extraDimEnabled.value = enabled
+        PrivilegedBridge.putSecureSettingInt(
+            context,
+            KEY_REDUCE_BRIGHT_COLORS_ACTIVATED,
+            if (enabled) 1 else 0
+        )
+    }
+
+    /** Returns false when OS Theme Injection owns the night mode and the change was skipped. */
+    fun setSystemDarkTheme(enabled: Boolean): Boolean {
+        if (_injectOsTheme.value) return false
+        _systemDarkThemeEnabled.value = enabled
+        themeSyncExecutor.execute {
+            PServerClient.exec("cmd uimode night ${if (enabled) "yes" else "no"}", wait = false)
+        }
+        return true
+    }
+
     /** Re-reads the system dark theme after a configuration change. */
     fun refreshSystemDarkTheme() {
         _systemDarkThemeEnabled.value = readSystemDarkThemeEnabled()
