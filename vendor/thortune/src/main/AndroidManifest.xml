@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Vendored ThorTune manifest, adapted for the bee-san BDSA fork (no launcher, no Application class). -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <queries>
+        <package android:name="james.dsp" />
+        <package android:name="me.timschneeberger.rootlessjamesdsp" />
+    </queries>
+
+    <application>
+        <provider
+            android:name="com.androosio.thortune.bdsa.ThorTuneFileProvider"
+            android:authorities="${applicationId}.thortune.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Opened from BDSA Extras. -->
+        <activity
+            android:name="com.androosio.thortune.MainActivity"
+            android:exported="false"
+            android:label="ThorTune"
+            android:taskAffinity="com.androosio.thortune"
+            android:theme="@style/Theme.ThorEssentialTweaks" />
+
+        <receiver
+            android:name="com.androosio.thortune.BootReceiver"
+            android:directBootAware="true"
+            android:exported="true">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

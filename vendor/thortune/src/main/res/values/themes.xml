@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Launch/window theme. Dark, true-black window background so the OLED panel doesn't
+         flash white before Compose draws the storm-night UI. -->
+    <style name="Theme.ThorEssentialTweaks" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+</resources>

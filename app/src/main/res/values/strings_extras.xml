@@ -16,4 +16,6 @@
     <string name="extras_app_pulse_desc" translatable="false">CPU/GPU tuning with AutoTDP (on by default), custom fan curve, OSD and per-app profiles. Opens on the top screen.</string>
     <string name="extras_app_sleepmanager" translatable="false">SleepManager</string>
     <string name="extras_app_sleepmanager_desc" translatable="false">Turns off Wi-Fi, Bluetooth and background services while the device sleeps and restores them on wake. Opens on the top screen.</string>
+    <string name="extras_app_thortune" translatable="false">ThorTune (JamesDSP + saturation)</string>
+    <string name="extras_app_thortune_desc" translatable="false">System-wide JamesDSP audio with Joey\'s Retro Handhelds preset, and display colour saturation for both screens. Opens on the top screen.</string>
 </resources>

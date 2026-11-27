@@ -46,7 +46,7 @@
             android:theme="@style/Theme.SleepManager" />
 
         <provider
-            android:name="androidx.core.content.FileProvider"
+            android:name="com.med.sleepmanager.bdsa.SleepManagerFileProvider"
             android:authorities="${applicationId}.sleepmanager.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

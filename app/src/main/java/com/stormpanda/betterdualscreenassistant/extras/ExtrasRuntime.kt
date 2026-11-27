@@ -4,6 +4,7 @@ package com.stormpanda.betterdualscreenassistant.extras
 
 import android.content.Context
 import android.util.Log
+import com.androosio.thortune.bdsa.ThorTuneBridge
 import com.kei.pulse.bdsa.PulseBridge
 import com.stormpanda.betterdualscreenassistant.extras.schedule.DisplaySchedules
 import kotlinx.coroutines.CoroutineScope
@@ -21,6 +22,8 @@ object ExtrasRuntime {
     fun onServiceCreate(context: Context, scope: CoroutineScope) {
         DisplaySchedules.start(context, scope)
         scope.launch(Dispatchers.IO) {
+            runCatching { ThorTuneBridge.stageAssets(context) }
+                .onFailure { Log.w(TAG, "Staging ThorTune assets failed", it) }
             delay(START_DELAY_MS)
             runCatching { PulseBridge.ensureRunning(context) }
                 .onFailure { Log.w(TAG, "Starting PULSE failed", it) }

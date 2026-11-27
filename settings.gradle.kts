@@ -25,3 +25,4 @@ include(":app")
 // Fork-only vendored modules (GPL). See vendor/*/LICENSE.
 include(":vendor:pulse")
 include(":vendor:sleepmanager")
+include(":vendor:thortune")
