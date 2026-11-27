@@ -192,6 +192,9 @@ All built-in Quick Setting tiles defined in `QuickSettingTileId.kt` are grouped 
 | `do_not_disturb` | **Do Not Disturb** | Instant Toggle | Toggles Android Zen Mode (`Settings.Global["zen_mode"]`: `0` = Off, `1` = Priority Only) and synchronizes via `cmd notification set_dnd on/off`. |
 | `airplane_mode` | **Airplane Mode** | Instant Toggle | Toggles Airplane Mode (`Settings.Global["airplane_mode_on"]`: `0` / `1`), broadcasts `Intent.ACTION_AIRPLANE_MODE_CHANGED`, and runs `cmd connectivity airplane-mode enable/disable`. |
 | `screen_cast` | **Screen Cast** (`Screen Cast` / `Connecting…` / `<Device Name>` / `Casting`) | Launch / Instant Disconnect | When idle, dismisses the overlay and opens Android's wireless Cast picker (`Settings.ACTION_CAST_SETTINGS`) on the Top Screen (`displayId = 0`, or `bottomDisplayId` when in Mode `2` *Only bottom screen*). When connecting or actively casting via Chromecast (`com.google.android.gms` `MediaProjection`) or Miracast (`WifiDisplay`), highlights the tile with the target receiver's name and disconnects immediately on a single tap. |
+| `night_light` | **Night Light** | Instant Toggle | Toggles Android Night Light on both screens (`Settings.Secure["night_display_activated"]`: `0` / `1`, applied by `ColorDisplayService`). Manual only: it does not create or follow a schedule. |
+| `extra_dim` | **Extra Dim** | Instant Toggle | Toggles Android Extra Dim (Reduce Bright Colors) on both screens (`Settings.Secure["reduce_bright_colors_activated"]`: `0` / `1`). Has no effect on firmware built without `config_reduceBrightColorsAvailable`. |
+| `dark_theme` | **Dark Theme** | Instant Toggle | Switches the Android system between light and dark theme (`cmd uimode night yes/no`). Greyed out while **OS Theme Injection** is on, because the Theme Mode tile then owns the system night mode. |
 
 #### Category C: Tools (Disabled by Default)
 
