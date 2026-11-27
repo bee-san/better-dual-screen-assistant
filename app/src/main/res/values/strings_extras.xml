@@ -14,4 +14,6 @@
     <string name="extras_open" translatable="false">Open</string>
     <string name="extras_app_pulse" translatable="false">PULSE</string>
     <string name="extras_app_pulse_desc" translatable="false">CPU/GPU tuning with AutoTDP (on by default), custom fan curve, OSD and per-app profiles. Opens on the top screen.</string>
+    <string name="extras_app_sleepmanager" translatable="false">SleepManager</string>
+    <string name="extras_app_sleepmanager_desc" translatable="false">Turns off Wi-Fi, Bluetooth and background services while the device sleeps and restores them on wake. Opens on the top screen.</string>
 </resources>

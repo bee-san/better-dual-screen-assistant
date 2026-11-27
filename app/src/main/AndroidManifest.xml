@@ -32,7 +32,7 @@
         <package android:name="com.stormpanda.megingiard" />
         <package android:name="com.stormpanda.megingiard.debug" />
         <package android:name="com.aure.clustertune" />
-        <provider android:authorities="com.stormpanda.megingiard.provider;com.stormpanda.megingiard.debug.provider" />
+        <provider android:authorities="com.stormpanda.megingiard.provider;com.stormpanda.megingiard.debug.provider;com.raofflineproxy.config" />
         <intent>
             <action android:name="com.ro.mapping.action.MAPPING_SERVICE" />
         </intent>

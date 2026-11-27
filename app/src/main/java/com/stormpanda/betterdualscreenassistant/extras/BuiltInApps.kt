@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.Display
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.Speed
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.kei.pulse.bdsa.PulseBridge
@@ -28,7 +29,16 @@ object BuiltInApps {
         PulseBridge.launchIntent(it)
     }
 
-    val all: List<App> = listOf(PULSE)
+    val SLEEP_MANAGER = App(
+        "sleepmanager",
+        R.string.extras_app_sleepmanager,
+        R.string.extras_app_sleepmanager_desc,
+        Icons.Rounded.Bedtime
+    ) {
+        Intent(it, com.med.sleepmanager.MainActivity::class.java)
+    }
+
+    val all: List<App> = listOf(PULSE, SLEEP_MANAGER)
 
     fun open(context: Context, app: App) {
         try {

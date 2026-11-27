@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <permission
+        android:name="com.med.sleepmanager.permission.CONTROL_HELPER"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.med.sleepmanager.permission.CONTROL_HELPER" />
+    <uses-permission android:name="com.med.sleepmanager.helper.permission.CONTROL" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <uses-permission android:name="com.raofflineproxy.permission.CONTROL_PROXY" />
+
+    <queries>
+        <package android:name="com.med.sleepmanager.helper" />
+        <package android:name="com.github.catfriend1.syncthingfork" />
+        <package android:name="com.github.catfriend1.syncthingfork.debug" />
+        <package android:name="com.github.catfriend1.syncthingandroid" />
+        <package android:name="com.github.catfriend1.syncthingandroid.debug" />
+        <package android:name="com.tailscale.ipn" />
+        <package android:name="com.chiller3.basicsync" />
+        <package android:name="com.raofflineproxy" />
+        <package android:name="james.dsp" />
+        <package android:name="me.timschneeberger.rootlessjamesdsp" />
+        <package android:name="io.github.sds100.keymapper" />
+    </queries>
+
+    <application>
+
+        <!-- Opened from BDSA Extras; no separate launcher icon in the merged app. -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:label="SleepManager"
+            android:taskAffinity="com.med.sleepmanager"
+            android:theme="@style/Theme.SleepManager" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.sleepmanager.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/update_file_paths" />
+        </provider>
+
+        <!-- Read-only status API. No private diagnostics or control methods exposed. -->
+        <provider
+            android:name=".api.SleepManagerStatusProvider"
+            android:authorities="${applicationId}.sleepmanager.status"
+            android:exported="true" />
+
+        <service
+            android:name=".service.SleepManagerService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Monitors screen sleep and wake state to apply low-power actions and safely restore them on wake." />
+        </service>
+
+        <service
+            android:name=".update.UpdateCheckJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <service
+            android:name=".qs.SleepManagerTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_shield"
+            android:label="SleepManager"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".protection.ThorDeviceAdminReceiver"
+            android:exported="true"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".service.SleepDelayReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".service.PeriodicSyncReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- Key Mapper 4.7+ publishes mappings state; never mutates it by itself. -->
+        <receiver
+            android:name=".integration.KeyMapperStateReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="io.github.sds100.keymapper.ACTION_MAPPINGS_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".service.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>
