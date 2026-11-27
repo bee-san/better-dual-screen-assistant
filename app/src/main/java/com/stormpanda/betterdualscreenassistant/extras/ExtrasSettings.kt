@@ -19,6 +19,7 @@ import com.stormpanda.betterdualscreenassistant.extras.schedule.DisplaySchedules
 import com.stormpanda.betterdualscreenassistant.extras.schedule.ScheduleConfig
 import com.stormpanda.betterdualscreenassistant.extras.schedule.ScheduleMath
 import com.stormpanda.betterdualscreenassistant.extras.schedule.ScheduleTarget
+import com.stormpanda.megingiard.ui.GamepadActionCard
 import com.stormpanda.megingiard.ui.GamepadSectionHeader
 import com.stormpanda.megingiard.ui.GamepadStepperCard
 import com.stormpanda.megingiard.ui.GamepadToggleCard
@@ -28,15 +29,23 @@ private const val TIME_STEP_MINUTES = 15
 
 /** Content of the fork-only "Extras" settings category. */
 @Composable
-internal fun ExtrasSettingsTabContent(
-    injectOsTheme: Boolean,
-    extraCards: @Composable () -> Unit = {}
-) {
+internal fun ExtrasSettingsTabContent(injectOsTheme: Boolean) {
     val context = LocalContext.current
     DisplaySchedules.init(context)
     val configs by DisplaySchedules.configs.collectAsState()
 
-    extraCards()
+    GamepadSectionHeader(text = stringResource(R.string.extras_apps_header))
+    BuiltInApps.all.forEachIndexed { index, app ->
+        GamepadActionCard(
+            title = stringResource(app.titleRes),
+            description = stringResource(app.descriptionRes),
+            icon = app.icon,
+            actionText = stringResource(R.string.extras_open),
+            itemKey = "extras_app_${app.key}",
+            onClick = { BuiltInApps.open(context, app) },
+            modifier = if (index == 0) Modifier.firstDeckItem() else Modifier
+        )
+    }
 
     GamepadSectionHeader(text = stringResource(R.string.extras_schedules_header))
 
@@ -71,7 +80,6 @@ internal fun ExtrasSettingsTabContent(
             enabled = !blockedByInjection,
             itemKey = "extras_schedule_${target.key}",
             onCheckedChange = { on -> DisplaySchedules.update(context, target) { it.copy(enabled = on) } },
-            modifier = if (index == 0) Modifier.firstDeckItem() else Modifier
         )
         if (cfg.enabled && !blockedByInjection) {
             GamepadStepperCard(

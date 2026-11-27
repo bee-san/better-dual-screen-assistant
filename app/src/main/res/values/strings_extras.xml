@@ -10,4 +10,8 @@
     <string name="extras_schedule_dark_theme_blocked" translatable="false">Unavailable while OS Theme Injection is on, because the Theme Mode tile owns the system theme.</string>
     <string name="extras_schedule_start" translatable="false">%1$s: turn on at</string>
     <string name="extras_schedule_end" translatable="false">%1$s: turn off at</string>
+    <string name="extras_apps_header" translatable="false">Built-in apps</string>
+    <string name="extras_open" translatable="false">Open</string>
+    <string name="extras_app_pulse" translatable="false">PULSE</string>
+    <string name="extras_app_pulse_desc" translatable="false">CPU/GPU tuning with AutoTDP (on by default), custom fan curve, OSD and per-app profiles. Opens on the top screen.</string>
 </resources>

@@ -21,3 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "BetterDualScreenAssistant"
 include(":app")
+
+// Fork-only vendored modules (GPL). See vendor/*/LICENSE.
+include(":vendor:pulse")

@@ -133,6 +133,7 @@ androidComponents {
 }
 
 dependencies {
+    implementation(project(":vendor:pulse"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
