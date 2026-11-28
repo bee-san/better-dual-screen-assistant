@@ -22,7 +22,7 @@ public final class HelperProtocol {
     public static final String HELPER_COMMAND_SERVICE_V2_CLASS =
             "com.med.sleepmanager.helper.HelperCommandServiceV2";
     public static final String PERMISSION =
-            "com.med.sleepmanager.permission.CONTROL_HELPER";
+            "com.stormpanda.betterdualscreenassistant.sleepmanager.permission.CONTROL_HELPER";
     public static final String PERMISSION_V2 =
             "com.med.sleepmanager.helper.permission.CONTROL";
     public static final long HELPER_PROTOCOL_V2_MIN_VERSION_CODE = 1117L;

@@ -65,7 +65,7 @@ class HelperProtocolContractTest {
         assertEquals("com.med.sleepmanager", HelperProtocol.MAIN_PACKAGE)
         assertEquals("com.med.sleepmanager.helper", HelperProtocol.HELPER_PACKAGE)
         assertEquals(
-            "com.med.sleepmanager.permission.CONTROL_HELPER",
+            "com.stormpanda.betterdualscreenassistant.sleepmanager.permission.CONTROL_HELPER",
             HelperProtocol.PERMISSION
         )
         assertEquals(

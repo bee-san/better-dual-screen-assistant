@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <permission
-        android:name="com.med.sleepmanager.permission.CONTROL_HELPER"
+        android:name="com.stormpanda.betterdualscreenassistant.sleepmanager.permission.CONTROL_HELPER"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.med.sleepmanager.permission.CONTROL_HELPER" />
+    <uses-permission android:name="com.stormpanda.betterdualscreenassistant.sleepmanager.permission.CONTROL_HELPER" />
     <uses-permission android:name="com.med.sleepmanager.helper.permission.CONTROL" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
