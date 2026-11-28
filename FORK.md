@@ -17,6 +17,7 @@ and each vendored app keeps its own GPL license (see `vendor/*/LICENSE`).
 | ThorTune (JamesDSP engine + saturation) | `vendor/thortune` (GPL-2.0) | Bundles the JamesDSP Manager APK (`james.dsp`), which is still its own app: it's the engine's control UI. The lower-screen companion panel is off by default. |
 | Built-in apps open in BDSA's task from Settings | `extras/BuiltInApps.kt`, `MainActivity.onStop` | BACK returns to Extras; from the bottom panel they get their own task so BACK returns to the game. |
 | SleepManager | `vendor/sleepmanager` (GPL-3.0) | Self-updater disabled, and no Compatibility Helper (AYN/Retroid control radios directly). |
+| Upstream update checks off by default | `megingiard/update/UpdateManager.kt` | They point at stormpanda's releases, which can't install over this differently signed build. The Updates toggle still turns them on. |
 
 The vendored modules are upstream sources with small, marked changes: no launcher entries, no `Application`
 classes, renamed provider authorities and FileProvider classes, renamed resources that clashed, and a
@@ -24,10 +25,21 @@ classes, renamed provider authorities and FileProvider classes, renamed resource
 
 ## Build
 
+Use the release build day to day: it's shrunk and precompiled, so it's a third the size of the debug APK and
+uses about a third less CPU when idle.
+
 ```sh
-./gradlew assembleDebug testDebugUnitTest
-adb install -r app/build/outputs/apk/debug/app-debug.apk
+./gradlew testDebugUnitTest :app:assembleRelease
+adb push app/build/outputs/apk/release/app-release.apk /data/local/tmp/bdsm.apk
+adb shell pm install -r /data/local/tmp/bdsm.apk   # plain `adb install` fails on the Thor
 ```
+
+Signing: the release key is `keystore/better-bdsm-release.jks` (alias `better-bdsm`), set up through the
+`bdsa.keystore.*` lines in `local.properties`. Both files are gitignored and must never be committed, because
+this repo is public. Back them up together somewhere private; without them, future builds can't update the
+installed app without an uninstall that wipes its settings. The key is the same certificate as this computer's
+debug keystore (SHA-256 `9b1d6e1b…708e21`), so release and debug builds update each other in place. When the
+release key is configured, debug builds are signed with it too.
 
 Uninstall the standalone PULSE, ThorTune and SleepManager apps first, so two copies don't fight over CPU limits,
 radios or the audio engine.

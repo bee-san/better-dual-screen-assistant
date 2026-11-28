@@ -103,13 +103,14 @@ class UpdateManagerTest {
     @Test
     fun `setAutoUpdateCheckEnabled updates stateFlow and resetForTesting clears state`() {
         UpdateManager.init(context, currentVersion = "1.0.0")
-        assertTrue(UpdateManager.autoUpdateCheckEnabled.value)
-
-        UpdateManager.setAutoUpdateCheckEnabled(false)
+        // Fork default: automatic upstream update checks are off until turned on.
         assertFalse(UpdateManager.autoUpdateCheckEnabled.value)
 
-        fullResetUpdateManager()
+        UpdateManager.setAutoUpdateCheckEnabled(true)
         assertTrue(UpdateManager.autoUpdateCheckEnabled.value)
+
+        fullResetUpdateManager()
+        assertFalse(UpdateManager.autoUpdateCheckEnabled.value)
         assertFalse(UpdateManager.updateAvailable.value)
         assertNull(UpdateManager.latestReleaseInfo.value)
         assertFalse(UpdateManager.isChecking.value)

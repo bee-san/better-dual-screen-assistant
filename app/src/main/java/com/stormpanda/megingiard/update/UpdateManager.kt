@@ -59,7 +59,11 @@ object UpdateManager {
     @Volatile
     internal var lastFailedCheckElapsedMs: Long = 0L
 
-    private val _autoUpdateCheckEnabled = MutableStateFlow(true)
+    // Fork-only (GPL-3.0-or-later): automatic checks default off. They look at upstream stormpanda releases,
+    // which can't install over this differently signed fork. The settings toggle still turns them on.
+    private const val AUTO_UPDATE_CHECK_DEFAULT = false
+
+    private val _autoUpdateCheckEnabled = MutableStateFlow(AUTO_UPDATE_CHECK_DEFAULT)
     val autoUpdateCheckEnabled: StateFlow<Boolean> = _autoUpdateCheckEnabled.asStateFlow()
 
     private val _updateAvailable = MutableStateFlow(false)
@@ -106,7 +110,7 @@ object UpdateManager {
             val prefs = getPrefs() ?: return
             prefsLoaded = true
             runCatching {
-                val autoEnabled = prefs.getBoolean(PREF_AUTO_UPDATE_CHECK_ENABLED, true)
+                val autoEnabled = prefs.getBoolean(PREF_AUTO_UPDATE_CHECK_ENABLED, AUTO_UPDATE_CHECK_DEFAULT)
                 _autoUpdateCheckEnabled.value = autoEnabled
 
                 val savedTag = prefs.getString(PREF_LATEST_RELEASE_TAG, "") ?: ""
@@ -281,7 +285,7 @@ object UpdateManager {
             prefsLoaded = false
             lastCheckTimeMs = 0L
             lastFailedCheckElapsedMs = 0L
-            _autoUpdateCheckEnabled.value = true
+            _autoUpdateCheckEnabled.value = AUTO_UPDATE_CHECK_DEFAULT
             _updateAvailable.value = false
             _latestReleaseInfo.value = null
             _isChecking.value = false
