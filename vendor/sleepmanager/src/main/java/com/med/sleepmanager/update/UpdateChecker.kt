@@ -62,7 +62,7 @@ object UpdateChecker {
     private val checkGate = UpdateCheckGate()
 
     /** True in the bee-san BDSA fork, where SleepManager is a built-in module rather than its own app. */
-    private const val BUNDLED_IN_BDSA = true
+    internal const val BUNDLED_IN_BDSA = true
 
     fun cachedUpdate(context: Context): UpdateInfo? {
         // BDSA fork: SleepManager ships inside BDSA, so never offer the standalone APK.

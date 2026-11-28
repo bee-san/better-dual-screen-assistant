@@ -13,7 +13,10 @@ object UpdateCheckScheduler {
         val scheduler =
             context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
 
-        if (!com.med.sleepmanager.data.AppPreferences.automaticUpdateChecks(context)) {
+        // BDSA fork: bundled builds never check for updates, so don't keep a daily job that only returns Disabled.
+        if (UpdateChecker.BUNDLED_IN_BDSA ||
+            !com.med.sleepmanager.data.AppPreferences.automaticUpdateChecks(context)
+        ) {
             scheduler.cancel(JOB_ID)
             return
         }

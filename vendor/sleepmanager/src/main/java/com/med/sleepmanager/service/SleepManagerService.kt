@@ -158,16 +158,20 @@ class SleepManagerService : Service() {
     }
 
     private val externalPowerDisconnectRecheckRunnable = Runnable {
-        val stillConnected =
-            DeviceControlController.externalPowerConnected(this)
-        if (stillConnected) {
-            Log.i(
-                TAG,
-                "Ignoring transient power disconnect; external power is still connected"
-            )
-            handleExternalPowerChanged(connected = true)
-        } else {
-            handleExternalPowerChanged(connected = false)
+        try {
+            val stillConnected =
+                DeviceControlController.externalPowerConnected(this)
+            if (stillConnected) {
+                Log.i(
+                    TAG,
+                    "Ignoring transient power disconnect; external power is still connected"
+                )
+                handleExternalPowerChanged(connected = true)
+            } else {
+                handleExternalPowerChanged(connected = false)
+            }
+        } finally {
+            powerRecheckWakeLock?.takeIf { it.isHeld }?.let { runCatching { it.release() } }
         }
     }
 
@@ -178,6 +182,13 @@ class SleepManagerService : Service() {
     private var raOfflineProxyRestoreInFlight = false
     private val sleepDelayState = SleepDelayState()
     private var sleepTransitionWakeLock: PowerManager.WakeLock? = null
+
+    /** BDSA fork: keeps the CPU up for the short unplug recheck, so Battery Saver isn't left off all night. */
+    private val powerRecheckWakeLock: PowerManager.WakeLock? by lazy {
+        (getSystemService(Context.POWER_SERVICE) as? PowerManager)
+            ?.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "$packageName:power-recheck")
+            ?.apply { setReferenceCounted(false) }
+    }
     private var networkReadyGate: NetworkReadyGate? = null
     private val helperNetworkRestoreHandoffState =
         HelperNetworkRestoreHandoffState()
@@ -535,6 +546,10 @@ class SleepManagerService : Service() {
                     handler.removeCallbacks(
                         externalPowerDisconnectRecheckRunnable
                     )
+                    // BDSA fork: a Handler delay doesn't run while suspended; hold the CPU until the recheck.
+                    runCatching {
+                        powerRecheckWakeLock?.acquire(EXTERNAL_POWER_DISCONNECT_RECHECK_MS + 3_000L)
+                    }
                     handler.postDelayed(
                         externalPowerDisconnectRecheckRunnable,
                         EXTERNAL_POWER_DISCONNECT_RECHECK_MS
@@ -1510,10 +1525,14 @@ class SleepManagerService : Service() {
 
         handler.removeCallbacks(sleepRadioRunnable)
         cancelActiveBasicSyncWait()
-        releaseSleepTransitionWakeLock()
+        // BDSA fork: hold the CPU awake through the root commands below (the grace lock was just used up), so
+        // the kernel can't suspend halfway and leave Wi-Fi / Bluetooth / Battery Saver unchanged until the next
+        // wake. The chain's existing releases end it, and the timeout bounds it.
+        acquireSleepTransitionWakeLock()
 
         val conditions = SleepConditionEvaluator.evaluate(this)
         if (!conditions.met) {
+            releaseSleepTransitionWakeLock()
             SyncMaintenanceScheduler.cancel(this)
             SyncTransitionStore.clear(this)
             sleepCycleRuntimeState.markSkippedByConditions()
@@ -1587,7 +1606,7 @@ class SleepManagerService : Service() {
                     ) {
                         startActiveBasicSyncWait()
                     } else {
-                        releaseSleepTransitionWakeLock()
+                        acquireSleepTransitionWakeLock() // BDSA fork: stay awake for the sleep actions
                         continueFreshSleepActions(
                             transitionSyncRequested = false
                         )
@@ -1601,7 +1620,7 @@ class SleepManagerService : Service() {
         }
 
         if (!scheduled) {
-            releaseSleepTransitionWakeLock()
+            acquireSleepTransitionWakeLock() // BDSA fork: stay awake for the sleep actions
             continueFreshSleepActions(
                 transitionSyncRequested = false
             )
@@ -4739,6 +4758,7 @@ class SleepManagerService : Service() {
         handler.removeCallbacks(closedLidScreenOnRecheckRunnable)
         handler.removeCallbacks(dockDisconnectRunnable)
         handler.removeCallbacks(externalPowerDisconnectRecheckRunnable)
+        powerRecheckWakeLock?.takeIf { it.isHeld }?.let { runCatching { it.release() } }
         resetBasicSyncWakeRestoreConfirmation()
         handler.removeCallbacks(ownedBasicSyncRestoreRunnable)
         handler.removeCallbacks(ownedDeviceControlRestoreRunnable)
