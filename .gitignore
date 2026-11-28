@@ -16,3 +16,6 @@ reference/
 .kotlin/
 .tmp/
 .bdsa-contrib-notice-shown
+
+# Vendored module build output (fork-only)
+vendor/*/build/
