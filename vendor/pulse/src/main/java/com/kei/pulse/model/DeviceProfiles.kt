@@ -30,6 +30,11 @@ data class DeviceProfile(
     val fpsTargetOptions: List<Int>,
     /** Odin-tuned watt cap + prime-walled settle apply (tight ~13–14 W chassis, vendor-floored prime). */
     val appliesOdinPowerTuning: Boolean,
+    /**
+     * BDSA fork: the vendor fan daemon re-pins the duty under PULSE's Custom fan, so it needs the fast
+     * re-check. Odin only (see `FanCurveController.reconcileActualDuty`); unknown hardware keeps it to be safe.
+     */
+    val vendorRepinsFanDuty: Boolean = true,
 )
 
 object DeviceProfiles {
@@ -52,6 +57,7 @@ object DeviceProfiles {
         honorsGameModeFpsCap = false,
         fpsTargetOptions = listOf(60, 90, 120),
         appliesOdinPowerTuning = false,
+        vendorRepinsFanDuty = false,
     )
 
     /** Unknown hardware: conservative — Smart release, no watt cap/settle, refresh-path fps targets. */

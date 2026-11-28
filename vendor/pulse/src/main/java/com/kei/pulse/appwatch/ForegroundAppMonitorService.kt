@@ -1031,6 +1031,9 @@ class ForegroundAppMonitorService : Service() {
         val autoPaused = autoTdpPackage != null
         guardedOneShot("autotdp pause") { if (autoPaused) autoTune.pauseForScreenOff(ensurePolicies()) }
         guardedOneShot("combo disarm") { ensureComboWatcher(settings, active = false) }
+        // BDSA fork: nothing reads FPS while asleep, so stop SurfaceFlinger TimeStats recording; the first
+        // awake read re-enables it.
+        guardedOneShot("fps stop") { fpsReader.stop() }
         android.util.Log.i(
             "PulseSleep",
             "screen off → total sleep (fanReleased=$fanReleased rgbDark=${settings.rgbMode != RgbMode.OFF} autoTdpPaused=$autoPaused)",
@@ -1075,6 +1078,13 @@ class ForegroundAppMonitorService : Service() {
         if (fanLoopJob?.isActive == true) return
         fanLoopJob = serviceScope.launch {
             var sinceSlewMs = 0L
+            // BDSA fork: only the Odin's vendor daemon re-pins the duty, so elsewhere (Thor/RP6) re-check at the
+            // slew cadence instead of every 120 ms: about 3 root reads a second instead of 8, same ramp.
+            val stepMs = if (DeviceProfiles.forSoc(container.repository.socModel()).vendorRepinsFanDuty) {
+                FAN_RECHECK_MS
+            } else {
+                FAN_SLEW_MS
+            }
             while (customFanRunning) {
                 try {
                     // Pause everything while autocalibrate drives the duty directly (avoids a write race).
@@ -1093,7 +1103,7 @@ class ForegroundAppMonitorService : Service() {
                         }
                         // Advance the smooth ramp on its own slower cadence so the fan-response-step tuning is
                         // unchanged by the faster duty re-check above.
-                        sinceSlewMs += FAN_RECHECK_MS
+                        sinceSlewMs += stepMs
                         if (sinceSlewMs >= FAN_SLEW_MS) {
                             fanCurveController.slew(sinceSlewMs)
                             sinceSlewMs = 0L
@@ -1104,7 +1114,7 @@ class ForegroundAppMonitorService : Service() {
                 } catch (t: Throwable) {
                     android.util.Log.e("PulseFan", "fan reassert loop iteration failed", t)
                 }
-                delay(FAN_RECHECK_MS)
+                delay(stepMs)
             }
         }
     }
@@ -2004,7 +2014,7 @@ class ForegroundAppMonitorService : Service() {
         private const val CHANNEL_ID = "per_app_profile_monitoring"
         private const val NOTIFICATION_ID = 32
         // Diagnostic AutoTDP logging (adb logcat -s PulseAutoTdp) — on while verifying on-device.
-        private const val AUTO_DEBUG = true
+        private const val AUTO_DEBUG = false // BDSA fork: per-step diagnostics cost extra root reads + log spam
         private const val POLL_INTERVAL_MS = 1_000L
         private const val FAN_SLEW_MS = 300L // smooth-ramp cadence: small steps → smooth & quiet
         private const val FAN_RECHECK_MS = 120L // duty re-check cadence: catch the vendor's game-transition

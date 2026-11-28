@@ -33,6 +33,9 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -252,12 +255,16 @@ fun FanCurveEditor(bindings: FanCurveEditorBindings, modifier: Modifier = Modifi
     // the RPM tach is unreliable, so we report the real fan duty % — same number the vendor app shows).
     var liveTemp by remember { mutableStateOf<Int?>(null) }
     var liveDutyPercent by remember { mutableStateOf<Int?>(null) }
-    LaunchedEffect(Unit) {
-        while (true) {
-            val t = bindings.readTelemetry()
-            liveTemp = maxOf(t.cpuTempC ?: 0, t.gpuTempC ?: 0).takeIf { it > 0 }
-            bindings.readFanDutyPercent()?.let { liveDutyPercent = it }
-            delay(1_500)
+    // BDSA fork: poll only while PULSE is on screen, not after Home leaves the activity stopped but alive.
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    LaunchedEffect(lifecycle) {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            while (true) {
+                val t = bindings.readTelemetry()
+                liveTemp = maxOf(t.cpuTempC ?: 0, t.gpuTempC ?: 0).takeIf { it > 0 }
+                bindings.readFanDutyPercent()?.let { liveDutyPercent = it }
+                delay(1_500)
+            }
         }
     }
 
@@ -684,10 +691,14 @@ fun TelemetryHud(
     modifier: Modifier = Modifier,
 ) {
     var snap by remember { mutableStateOf(TelemetrySnapshot()) }
-    LaunchedEffect(Unit) {
-        while (true) {
-            snap = readTelemetry()
-            delay(1_500)
+    // BDSA fork: poll only while PULSE is on screen.
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    LaunchedEffect(lifecycle) {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            while (true) {
+                snap = readTelemetry()
+                delay(1_500)
+            }
         }
     }
     val cpuMhz = snap.cpuClocksMhz.values.maxOrNull()

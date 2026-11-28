@@ -182,7 +182,7 @@ class FpsReader(private val context: Context) {
         private const val TAG = "PulseFps"
         // Logs the raw reduced TimeStats line each sample — leave on while the FPS path is being
         // verified on-device (adb logcat -s PulseFps); cheap (one short line per ~second).
-        private const val DEBUG_LOG = true
+        private const val DEBUG_LOG = false // BDSA fork: was logging every FPS sample
         private const val SCRIPT_NAME = "fps-probe.sh"
         private const val HISTORY = 40
         private const val MIN_SAMPLE_INTERVAL_MS = 500L

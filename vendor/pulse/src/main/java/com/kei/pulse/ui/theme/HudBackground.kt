@@ -7,6 +7,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -235,10 +238,14 @@ fun HudBackground(
     // clock (instead of an infinite transition) cuts the draw work ~4x on these panels.
     // Emits absolute seconds: Ronin's motion never loops; the other themes derive their
     // seamless 22s loop from it. Wraps every 2h (one invisible frame) for float precision.
-    val clock = produceState(0f) {
-        while (true) {
-            value = (SystemClock.uptimeMillis() % 7_200_000L) / 1000f
-            delay(33)
+    // BDSA fork: tick only while the screen is visible (STARTED), not 30 times a second in the background.
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val clock = produceState(0f, lifecycle) {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            while (true) {
+                value = (SystemClock.uptimeMillis() % 7_200_000L) / 1000f
+                delay(33)
+            }
         }
     }
 

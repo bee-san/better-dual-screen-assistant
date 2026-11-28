@@ -32,6 +32,7 @@ class DeviceProfilesTest {
         assertFalse("the Odin panel has no 90 Hz mode — Android floors a 90 cap to 60", 90 in p.fpsTargetOptions)
         assertTrue(p.appliesOdinPowerTuning)
         assertEquals(FanController.SMART, p.fanReleaseMode)
+        assertTrue("the Odin vendor daemon re-pins the fan duty — keep the fast re-check", p.vendorRepinsFanDuty)
     }
 
     @Test
@@ -42,6 +43,7 @@ class DeviceProfilesTest {
         assertEquals(listOf(60, 90, 120), p.fpsTargetOptions)
         assertFalse(p.appliesOdinPowerTuning)
         assertEquals(FanController.SMART, p.fanReleaseMode)
+        assertFalse("Thor/RP6 leave the duty alone — no 120 ms re-check", p.vendorRepinsFanDuty)
     }
 
     @Test
@@ -51,6 +53,7 @@ class DeviceProfilesTest {
         assertFalse(p.honorsGameModeFpsCap)
         assertFalse(p.appliesOdinPowerTuning)
         assertEquals(FanController.SMART, p.fanReleaseMode)
+        assertTrue("unknown hardware keeps the safe fast fan re-check", p.vendorRepinsFanDuty)
     }
 
     // ── Consumers must agree with the table (no second copy of a device fact) ───────────────────────
