@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- App Names -->
-    <string name="app_name">Better Dual Screen Assistant</string>
-    <string name="app_name_manager">Better Dual Screen Manager</string>
-    <string name="app_wordmark_assistant" translatable="false">BetterDualScreenAssistant</string>
-    <string name="app_wordmark_manager" translatable="false">BetterDualScreenManager</string>
+    <string name="app_name" translatable="false">Better BDSM</string><!-- Fork name (bee-san), to tell it apart from upstream BDSA. -->
+    <string name="app_name_manager" translatable="false">Better BDSM</string>
+    <string name="app_wordmark_assistant" translatable="false">BetterBDSM</string>
+    <string name="app_wordmark_manager" translatable="false">BetterBDSM</string>
 
     <!-- Language Settings -->
     <string name="language_system_default">System Default</string>

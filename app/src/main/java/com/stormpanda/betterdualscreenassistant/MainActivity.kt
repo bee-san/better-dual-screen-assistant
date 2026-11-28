@@ -159,6 +159,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.stormpanda.betterdualscreenassistant.extras.BuiltInApps
 import com.stormpanda.betterdualscreenassistant.extras.ExtrasSettingsTabContent
 import com.stormpanda.betterdualscreenassistant.plugin.BdsaPluginContract
 import com.stormpanda.betterdualscreenassistant.plugin.PluginIconLoader
@@ -367,6 +368,8 @@ class MainActivity : ComponentActivity() {
             flushIfStopped = flush
         )
         super.onStop()
+        // Fork-only (GPL-3.0-or-later): keep settings under a built-in app opened from Extras, so BACK returns here.
+        if (BuiltInApps.consumeKeepSettingsOpen()) return
         if (!isChangingConfigurations && !isFinishing && isDeviceInteractive()) {
             finishAndRemoveTask()
         }

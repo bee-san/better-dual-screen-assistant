@@ -57,6 +57,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.core.content.res.ResourcesCompat
+import com.stormpanda.betterdualscreenassistant.extras.BuiltInApps
 import com.stormpanda.betterdualscreenassistant.R
 import com.stormpanda.betterdualscreenassistant.plugin.BdsaPluginContract
 import com.stormpanda.betterdualscreenassistant.plugin.PluginIconLoader
@@ -1056,6 +1057,22 @@ private fun buildQuickSettingTileModels(
                 )
                 QuickSettingTileId.CLUSTER_TUNE -> add(
                     QuickSettingTileModel(tileId.gridTitle(context), R.drawable.ic_qs_clustertune, false, onOpenClusterTune)
+                )
+                // Fork-only (GPL-3.0-or-later): open the built-in apps on the top screen.
+                QuickSettingTileId.PULSE_APP -> add(
+                    QuickSettingTileModel(tileId.gridTitle(context), tileId.iconRes, false) {
+                        BuiltInApps.open(context, BuiltInApps.PULSE)
+                    }
+                )
+                QuickSettingTileId.THOR_TUNE_APP -> add(
+                    QuickSettingTileModel(tileId.gridTitle(context), tileId.iconRes, false) {
+                        BuiltInApps.open(context, BuiltInApps.THOR_TUNE)
+                    }
+                )
+                QuickSettingTileId.SLEEP_MANAGER_APP -> add(
+                    QuickSettingTileModel(tileId.gridTitle(context), tileId.iconRes, false) {
+                        BuiltInApps.open(context, BuiltInApps.SLEEP_MANAGER)
+                    }
                 )
             }
         }

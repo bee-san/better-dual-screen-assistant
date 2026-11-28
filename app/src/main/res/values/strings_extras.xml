@@ -7,6 +7,20 @@
     <string name="extras_schedule_extra_dim" translatable="false">Extra Dim schedule</string>
     <string name="extras_schedule_dark_theme" translatable="false">Dark Theme schedule</string>
     <string name="extras_schedule_desc" translatable="false">On from %1$s to %2$s every day. A manual toggle lasts until the next switch time.</string>
+    <string name="extras_schedule_desc_sun" translatable="false">On from sunset (%1$s today) to sunrise (%2$s) every day. A manual toggle lasts until the next switch time.</string>
+    <string name="extras_schedule_sun_title" translatable="false">%1$s: sunset to sunrise</string>
+    <string name="extras_schedule_sun_desc" translatable="false">Follows sunset and sunrise in %3$s (today %1$s to %2$s). Worked out on the device.</string>
+    <string name="extras_schedule_sun_desc_waiting" translatable="false">Follows sunset and sunrise in %3$s. The sun doesn\'t set or rise there today, so it uses %1$s to %2$s.</string>
+    <string name="extras_sun_header" translatable="false">Sunset and sunrise location</string>
+    <string name="extras_sun_place" translatable="false">Sun times for</string>
+    <string name="extras_sun_place_desc" translatable="false">Pick a city, or use your current location below.</string>
+    <string name="extras_sun_locate" translatable="false">Use current location</string>
+    <string name="extras_sun_locate_desc" translatable="false">Looks up your approximate location once, over Wi-Fi or mobile network (no GPS). Nothing runs in the background.</string>
+    <string name="extras_sun_locate_failed" translatable="false">Couldn\'t get a location. For quick Wi-Fi lookups, turn on Settings → Location → Location services → Google Location Accuracy, or pick a city above.</string>
+    <string name="extras_sun_locate_action" translatable="false">Locate</string>
+    <string name="extras_sun_locating" translatable="false">Locating…</string>
+    <string name="extras_sun_auto" translatable="false">Update when the time zone changes</string>
+    <string name="extras_sun_auto_desc" translatable="false">When you travel and the clock moves to a new time zone, looks up your location once. No tracking or polling.</string>
     <string name="extras_schedule_dark_theme_blocked" translatable="false">Unavailable while OS Theme Injection is on, because the Theme Mode tile owns the system theme.</string>
     <string name="extras_schedule_start" translatable="false">%1$s: turn on at</string>
     <string name="extras_schedule_end" translatable="false">%1$s: turn off at</string>
@@ -18,4 +32,12 @@
     <string name="extras_app_sleepmanager_desc" translatable="false">Turns off Wi-Fi, Bluetooth and background services while the device sleeps and restores them on wake. Opens on the top screen.</string>
     <string name="extras_app_thortune" translatable="false">ThorTune (JamesDSP + saturation)</string>
     <string name="extras_app_thortune_desc" translatable="false">System-wide JamesDSP audio with Joey\'s Retro Handhelds preset, and display colour saturation for both screens. Opens on the top screen.</string>
+    <string name="qs_cat_extras_title" translatable="false">Extras</string>
+    <string name="qs_cat_extras_desc" translatable="false">This build\'s built-in apps and display toggles (on by default)</string>
+    <string name="qs_tile_pulse_title" translatable="false">PULSE</string>
+    <string name="qs_tile_pulse_desc" translatable="false">Open PULSE (CPU/GPU tuning, AutoTDP, fan curve) on the top screen</string>
+    <string name="qs_tile_thortune_title" translatable="false">ThorTune</string>
+    <string name="qs_tile_thortune_desc" translatable="false">Open ThorTune (JamesDSP audio and display saturation) on the top screen</string>
+    <string name="qs_tile_sleepmanager_title" translatable="false">Sleep\nManager</string>
+    <string name="qs_tile_sleepmanager_desc" translatable="false">Open SleepManager (radios and services off while asleep) on the top screen</string>
 </resources>

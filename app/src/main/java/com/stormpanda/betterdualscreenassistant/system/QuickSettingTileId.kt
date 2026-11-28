@@ -33,6 +33,16 @@ enum class QuickSettingCategory(
         titleRes = R.string.qs_cat_tools_title,
         descriptionRes = R.string.qs_cat_tools_desc,
         enabledByDefault = false
+    ),
+
+    // Fork-only (bee-san/better-dual-screen-assistant), GPL-3.0-or-later: the built-in apps and the
+    // display toggles this build adds, on by default so they show on the bottom-screen panel.
+    EXTRAS(
+        title = "Extras",
+        description = "This build's built-in apps and display toggles (on by default)",
+        titleRes = R.string.qs_cat_extras_title,
+        descriptionRes = R.string.qs_cat_extras_desc,
+        enabledByDefault = true
     );
 
     @VisibleForTesting
@@ -219,7 +229,7 @@ enum class QuickSettingTileId(
         titleRes = R.string.qs_tile_night_light_title,
         descriptionRes = R.string.qs_tile_night_light_desc,
         iconRes = R.drawable.ic_qs_night_light,
-        category = QuickSettingCategory.ANDROID_SYSTEM
+        category = QuickSettingCategory.EXTRAS
     ),
     EXTRA_DIM(
         key = "extra_dim",
@@ -228,7 +238,7 @@ enum class QuickSettingTileId(
         titleRes = R.string.qs_tile_extra_dim_title,
         descriptionRes = R.string.qs_tile_extra_dim_desc,
         iconRes = R.drawable.ic_qs_extra_dim,
-        category = QuickSettingCategory.ANDROID_SYSTEM
+        category = QuickSettingCategory.EXTRAS
     ),
     DARK_THEME(
         key = "dark_theme",
@@ -237,7 +247,7 @@ enum class QuickSettingTileId(
         titleRes = R.string.qs_tile_dark_theme_title,
         descriptionRes = R.string.qs_tile_dark_theme_desc,
         iconRes = R.drawable.ic_qs_dark_theme,
-        category = QuickSettingCategory.ANDROID_SYSTEM
+        category = QuickSettingCategory.EXTRAS
     ),
 
     // 3. Tools (OFF by default)
@@ -339,6 +349,35 @@ enum class QuickSettingTileId(
         descriptionRes = R.string.qs_tile_cluster_tune_desc,
         iconRes = R.drawable.ic_qs_clustertune,
         category = QuickSettingCategory.TOOLS
+    ),
+
+    // 4. Extras (fork-only, ON by default): open the built-in apps on the top screen.
+    PULSE_APP(
+        key = "extras_pulse",
+        title = "PULSE",
+        description = "Open PULSE (CPU/GPU tuning, AutoTDP, fan curve) on the top screen",
+        titleRes = R.string.qs_tile_pulse_title,
+        descriptionRes = R.string.qs_tile_pulse_desc,
+        iconRes = R.drawable.ic_qs_pulse,
+        category = QuickSettingCategory.EXTRAS
+    ),
+    THOR_TUNE_APP(
+        key = "extras_thortune",
+        title = "ThorTune",
+        description = "Open ThorTune (JamesDSP audio and display saturation) on the top screen",
+        titleRes = R.string.qs_tile_thortune_title,
+        descriptionRes = R.string.qs_tile_thortune_desc,
+        iconRes = R.drawable.ic_qs_thortune,
+        category = QuickSettingCategory.EXTRAS
+    ),
+    SLEEP_MANAGER_APP(
+        key = "extras_sleepmanager",
+        title = "SleepManager",
+        description = "Open SleepManager (radios and services off while asleep) on the top screen",
+        titleRes = R.string.qs_tile_sleepmanager_title,
+        descriptionRes = R.string.qs_tile_sleepmanager_desc,
+        iconRes = R.drawable.ic_qs_sleepmanager,
+        category = QuickSettingCategory.EXTRAS
     );
 
     fun isSupportedOn(

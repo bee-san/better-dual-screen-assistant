@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later. Fork-only (bee-san/better-dual-screen-assistant). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="50dp"
+    android:height="50dp"
+    android:viewportWidth="50"
+    android:viewportHeight="50">
+    <!-- 50x50 5px-grid pixel equalizer bars -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M0,20H5V30H0V20ZM10,10H15V40H10V10ZM20,5H30V45H20V5ZM35,10H40V40H35V10ZM45,20H50V30H45V20Z" />
+</vector>

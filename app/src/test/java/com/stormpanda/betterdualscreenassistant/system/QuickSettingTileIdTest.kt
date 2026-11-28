@@ -50,13 +50,17 @@ class QuickSettingTileIdTest {
         assertEquals(QuickSettingCategory.ANDROID_SYSTEM, QuickSettingTileId.SCREEN_CAST.category)
         assertEquals("Screen Cast", QuickSettingTileId.SCREEN_CAST.title)
         assertEquals("screen_cast", QuickSettingTileId.SCREEN_CAST.key)
+        assertTrue(QuickSettingCategory.EXTRAS.enabledByDefault)
         for (tile in listOf(
             QuickSettingTileId.NIGHT_LIGHT,
             QuickSettingTileId.EXTRA_DIM,
-            QuickSettingTileId.DARK_THEME
+            QuickSettingTileId.DARK_THEME,
+            QuickSettingTileId.PULSE_APP,
+            QuickSettingTileId.THOR_TUNE_APP,
+            QuickSettingTileId.SLEEP_MANAGER_APP
         )) {
-            assertTrue(tile in QuickSettingTileId.defaultDisabled)
-            assertEquals(QuickSettingCategory.ANDROID_SYSTEM, tile.category)
+            assertTrue(tile !in QuickSettingTileId.defaultDisabled)
+            assertEquals(QuickSettingCategory.EXTRAS, tile.category)
             assertTrue(tile.isSupportedOn(DeviceProfile.AYN_THOR))
             assertTrue(tile.isSupportedOn(DeviceProfile.RETROID_POCKET_DUO))
         }

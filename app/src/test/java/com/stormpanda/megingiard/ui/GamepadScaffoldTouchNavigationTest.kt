@@ -169,7 +169,7 @@ class GamepadScaffoldTouchNavigationTest {
         idleCompose(activity, 500)
         assertNotNull(
             "Enable / Disable sub-page header should be visible",
-            findNodeWithTextOrNull(activity, "Toggle Visibility (10 of $totalTiles Active)")
+            findNodeWithTextOrNull(activity, "Toggle Visibility (16 of $totalTiles Active)")
         )
         assertNull(
             "Must not jump back to General tab when opening Enable / Disable Toggles via touch",
@@ -187,12 +187,12 @@ class GamepadScaffoldTouchNavigationTest {
         idleCompose(activity, 450)
         tapClickableNodeWithText(activity, "Key Focus Lock")
         idleCompose(activity, 200)
-        assertNotNull(findNodeWithTextOrNull(activity, "Toggle Visibility (9 of $totalTiles Active)"))
+        assertNotNull(findNodeWithTextOrNull(activity, "Toggle Visibility (15 of $totalTiles Active)"))
 
         enterTouchMode(activity)
         activity.onBackPressedDispatcher.onBackPressed()
         idleCompose(activity, 450)
-        assertNotNull("Should return to Quick Toggles tab", findNodeWithTextOrNull(activity, "9 / $totalTiles Active"))
+        assertNotNull("Should return to Quick Toggles tab", findNodeWithTextOrNull(activity, "15 / $totalTiles Active"))
         assertNull("Must not jump to General on system Back", findNodeWithTextOrNull(activity, "Replace Stock Assistant"))
 
         // 5. Two-tap touch tile swap inside Quick Settings Layout must exit active grid mode after swap
@@ -222,7 +222,7 @@ class GamepadScaffoldTouchNavigationTest {
         idleCompose(activity, 150)
         tapClickableNodeWithText(activity, "Confirm Reset to Default")
         idleCompose(activity, 250)
-        assertNotNull("Toggles should reset to 10 / $totalTiles Active", findNodeWithTextOrNull(activity, "10 / $totalTiles Active"))
+        assertNotNull("Toggles should reset to 16 / $totalTiles Active", findNodeWithTextOrNull(activity, "16 / $totalTiles Active"))
         assertNotNull(
             "Reset card should exit confirmation state after confirming in touch mode",
             findNodeWithTextOrNull(activity, "Reset Quick Toggles")
@@ -373,7 +373,7 @@ class GamepadScaffoldTouchNavigationTest {
             ).size
         assertNotNull(
             "D-pad Down from Quick Settings Layout must focus Enable / Disable Toggles directly",
-            findNodeWithTextOrNull(activity, "Toggle Visibility (10 of $totalTiles Active)")
+            findNodeWithTextOrNull(activity, "Toggle Visibility (16 of $totalTiles Active)")
         )
 
         // Back out of Enable / Disable sub-page, then switch to Appearance via R1 bumper
@@ -905,9 +905,9 @@ class GamepadScaffoldTouchNavigationTest {
         idleCompose(activity, 300)
 
         // Default state: Assistant
-        assertNotNull(findNodeWithTextOrNull(activity, "BetterDualScreenAssistant"))
-        assertNull(findNodeWithTextOrNull(activity, "BetterDualScreenManager"))
-        assertEquals("Better Dual Screen Assistant", activity.title.toString())
+        // Fork: both modes carry the fork name (Better BDSM).
+        assertNotNull(findNodeWithTextOrNull(activity, "BetterBDSM"))
+        assertEquals("Better BDSM", activity.title.toString())
 
         // Enter General deck and navigate to the Promotion toggle (14th card, 13 D-pad Down presses)
         sendKey(activity, KeyEvent.KEYCODE_DPAD_RIGHT)
@@ -929,9 +929,8 @@ class GamepadScaffoldTouchNavigationTest {
         sendKey(activity, KeyEvent.KEYCODE_BUTTON_A)
         idleCompose(activity, 250)
 
-        assertNotNull(findNodeWithTextOrNull(activity, "BetterDualScreenManager"))
-        assertNull(findNodeWithTextOrNull(activity, "BetterDualScreenAssistant"))
-        assertEquals("Better Dual Screen Manager", activity.title.toString())
+        assertNotNull(findNodeWithTextOrNull(activity, "BetterBDSM"))
+        assertEquals("Better BDSM", activity.title.toString())
         assertNotNull(
             findNodeWithTextOrNull(activity, "Promoted to Better Dual Screen Manager (toggle off to demote)")
         )
@@ -943,12 +942,12 @@ class GamepadScaffoldTouchNavigationTest {
         // Toggle OFF and back ON to verify demote toast + re-promotion
         sendKey(activity, KeyEvent.KEYCODE_BUTTON_A)
         idleCompose(activity, 200)
-        assertNotNull(findNodeWithTextOrNull(activity, "BetterDualScreenAssistant"))
+        assertNotNull(findNodeWithTextOrNull(activity, "BetterBDSM"))
         assertEquals("Back to Assistant duty.", DialogToastManager.currentToast.value?.message)
 
         sendKey(activity, KeyEvent.KEYCODE_BUTTON_A)
         idleCompose(activity, 200)
-        assertNotNull(findNodeWithTextOrNull(activity, "BetterDualScreenManager"))
+        assertNotNull(findNodeWithTextOrNull(activity, "BetterBDSM"))
 
         // Stopping MainActivity flushes the deferred launcher <activity-alias> swap
         controller.pause().stop()
@@ -988,7 +987,7 @@ class GamepadScaffoldTouchNavigationTest {
         assertNotNull(findNodeWithTextOrNull(activity, "Replace Stock Assistant"))
         assertNotNull(findNodeWithTextOrNull(activity, "physical Dual Screen button"))
 
-        // 2. Quick Toggles tab filters unsupported tiles (Ambient Light & Double-Tap Home -> 26 supported tiles)
+        // 2. Quick Toggles tab filters unsupported tiles (Ambient Light & Double-Tap Home -> 29 supported tiles; fork adds 6 Extras tiles, on by default)
         tapClickableNodeWithText(activity, "Quick Toggles")
         idleCompose(activity, 300)
         val supportedCount = com.stormpanda.betterdualscreenassistant.system.QuickSettingTileId
@@ -997,8 +996,8 @@ class GamepadScaffoldTouchNavigationTest {
                 isClusterTuneInstalled = false
             )
             .size
-        assertEquals(26, supportedCount)
-        assertNotNull(findNodeWithTextOrNull(activity, "9 / 26 Active"))
+        assertEquals(29, supportedCount)
+        assertNotNull(findNodeWithTextOrNull(activity, "15 / 29 Active"))
 
         // 3. Updates tab no longer shows Licenses; General tab places "Licenses & Third-Party Notices" at the very bottom
         tapClickableNodeWithText(activity, "Updates")

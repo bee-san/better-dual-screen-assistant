@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- App Names -->
-    <string name="app_name">Better Dual Screen Assistant</string>
-    <string name="app_name_manager">Better Dual Screen Manager</string>
 
     <!-- Language Settings -->
     <string name="language_system_default">Системный</string>

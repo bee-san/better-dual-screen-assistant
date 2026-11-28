@@ -2,8 +2,10 @@
 // Fork-only addition (bee-san/better-dual-screen-assistant). Not part of upstream BDSA.
 package com.stormpanda.betterdualscreenassistant.extras
 
+import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
@@ -66,12 +68,42 @@ object BuiltInApps {
         }
     }
 
+    /**
+     * From BDSA's settings (an Activity) the app opens in that task, so BACK returns to Extras.
+     * From the bottom-screen panel (a service context) it gets its own task, so BACK returns to the game.
+     */
     private fun start(context: Context, app: App) {
         try {
-            val options = ActivityOptions.makeBasic().setLaunchDisplayId(Display.DEFAULT_DISPLAY)
-            context.startActivity(app.intent(context).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), options.toBundle())
+            val intent = app.intent(context)
+            val options = ActivityOptions.makeBasic()
+            if (context.findActivity() != null) {
+                intent.flags = intent.flags and Intent.FLAG_ACTIVITY_NEW_TASK.inv()
+                keepSettingsOnNextStop = true
+            } else {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                options.setLaunchDisplayId(Display.DEFAULT_DISPLAY)
+            }
+            context.startActivity(intent, options.toBundle())
         } catch (t: Throwable) {
+            keepSettingsOnNextStop = false
             Log.w("BDSA-Extras", "Opening ${app.key} failed", t)
         }
+    }
+
+    /** Set while a built-in app opens on top of settings, which otherwise closes its task when stopped. */
+    @Volatile
+    private var keepSettingsOnNextStop = false
+
+    /** Called by MainActivity.onStop: true once if a built-in app just opened on top of it. */
+    fun consumeKeepSettingsOpen(): Boolean {
+        val keep = keepSettingsOnNextStop
+        keepSettingsOnNextStop = false
+        return keep
+    }
+
+    private tailrec fun Context.findActivity(): Activity? = when (this) {
+        is Activity -> this
+        is ContextWrapper -> baseContext.findActivity()
+        else -> null
     }
 }

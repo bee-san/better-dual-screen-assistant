@@ -235,14 +235,14 @@ class AssistantForegroundServiceTest {
         )
         val assistantAliasInfo = pm.getActivityInfo(assistantAlias, 0)
         assertTrue(assistantAliasInfo.enabled)
-        assertEquals("Better Dual Screen Assistant", assistantAliasInfo.loadLabel(pm).toString())
+        assertEquals("Better BDSM", assistantAliasInfo.loadLabel(pm).toString())
 
         val managerAliasInfo = pm.getActivityInfo(
             managerAlias,
             android.content.pm.PackageManager.MATCH_DISABLED_COMPONENTS
         )
         assertFalse(managerAliasInfo.enabled)
-        assertEquals("Better Dual Screen Manager", managerAliasInfo.loadLabel(pm).toString())
+        assertEquals("Better BDSM", managerAliasInfo.loadLabel(pm).toString())
 
         val serviceInfo = pm.getServiceInfo(ComponentName(context, AssistantForegroundService::class.java), 0)
         assertEquals(0, serviceInfo.flags and ServiceInfo.FLAG_STOP_WITH_TASK)
@@ -254,7 +254,7 @@ class AssistantForegroundServiceTest {
 
         val defaultNotification = service.createForegroundNotification(promoted = false)
         assertEquals(
-            "Better Dual Screen Assistant",
+            "Better BDSM",
             defaultNotification.extras.getString(android.app.Notification.EXTRA_TITLE)
         )
         assertEquals(
@@ -264,7 +264,7 @@ class AssistantForegroundServiceTest {
 
         val promotedNotification = service.createForegroundNotification(promoted = true)
         assertEquals(
-            "Better Dual Screen Manager",
+            "Better BDSM",
             promotedNotification.extras.getString(android.app.Notification.EXTRA_TITLE)
         )
         assertEquals(

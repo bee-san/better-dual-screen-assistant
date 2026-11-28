@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later. Fork-only (bee-san/better-dual-screen-assistant). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="50dp"
+    android:height="50dp"
+    android:viewportWidth="50"
+    android:viewportHeight="50">
+    <!-- 50x50 5px-grid pixel crescent moon and star -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M20,0H35V5H20V0ZM10,5H25V10H10V5ZM5,10H20V15H5V10ZM5,15H15V35H5V15ZM5,35H20V40H5V35ZM10,40H25V45H10V40ZM20,45H35V50H20V45ZM35,20H40V25H35V20ZM40,10H45V15H40V10Z" />
+</vector>
